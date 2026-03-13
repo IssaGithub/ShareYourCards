@@ -13,11 +13,15 @@ Eine Flutter-App, mit der du digitale Visitenkarten aus deinem Netzwerk zentral 
 ## Projekt starten
 
 1. Flutter SDK installieren (inkl. passender Plattform-Toolchains).
-2. Abhängigkeiten laden:
+2. Falls das Repository frisch geklont wurde und noch keine Plattformordner vorhanden sind:
+   ```bash
+   flutter create .
+   ```
+3. Abhängigkeiten laden:
    ```bash
    flutter pub get
    ```
-3. App starten:
+4. App starten:
    ```bash
    flutter run
    ```
