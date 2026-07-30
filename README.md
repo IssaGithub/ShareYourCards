@@ -22,6 +22,12 @@ lib/
 
 Abhängigkeiten fließen nur nach innen: Presentation → Domain ← Data.
 
+## Live (Netlify)
+
+- **URL:** https://lustrous-monstera-3f4e0a.netlify.app  
+- **Passwort:** `My-Drop-Site`  
+- Details & Claim: siehe [docs/NETLIFY.md](docs/NETLIFY.md)
+
 ## Starten
 
 ```bash
