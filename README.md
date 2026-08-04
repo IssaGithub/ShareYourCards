@@ -25,9 +25,21 @@ npm run dev
 
 Öffnen: [http://localhost:3000](http://localhost:3000)
 
+## GitHub Pages
+
+Statischer Export für GitHub Pages:
+
+```bash
+npm run build:pages
+```
+
+Nach Aktivierung von **Settings → Pages → Source: GitHub Actions** (oder Branch `gh-pages`):
+
+**https://issagithub.github.io/ShareYourCards/**
+
 ## Tech
 
-- Next.js (App Router)
+- Next.js (App Router, static export)
 - TypeScript
 - Tailwind CSS
 - Client-seitiges CRM mit React Context
