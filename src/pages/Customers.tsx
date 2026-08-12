@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, Search, Edit2, Trash2, Mail, Phone, Crown, Users } from 'lucide-react';
+import { Plus, Search, MoreHorizontal, Edit2, Trash2, Mail, Phone, X } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import type { Customer } from '../types';
 
@@ -8,12 +8,12 @@ export function Customers() {
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
+  const [activeMenu, setActiveMenu] = useState<string | null>(null);
 
   const filteredCustomers = customers.filter((customer) => {
     const fullName = `${customer.firstName} ${customer.lastName}`.toLowerCase();
     return fullName.includes(searchTerm.toLowerCase()) ||
-           customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-           customer.phone.includes(searchTerm);
+           customer.email.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
   const handleSave = (formData: FormData) => {
@@ -39,110 +39,117 @@ export function Customers() {
     setEditingCustomer(null);
   };
 
-  const getLoyaltyTier = (points: number) => {
-    if (points >= 2000) return { tier: 'Platin', color: 'from-slate-400 to-slate-600', bgColor: 'bg-slate-100 text-slate-700' };
-    if (points >= 1000) return { tier: 'Gold', color: 'from-amber-400 to-amber-600', bgColor: 'bg-amber-100 text-amber-700' };
-    if (points >= 500) return { tier: 'Silber', color: 'from-slate-300 to-slate-400', bgColor: 'bg-slate-100 text-slate-600' };
-    return { tier: 'Bronze', color: 'from-orange-400 to-orange-600', bgColor: 'bg-orange-100 text-orange-700' };
+  const getTier = (points: number) => {
+    if (points >= 2000) return { name: 'Platin', color: 'bg-neutral-900 text-white' };
+    if (points >= 1000) return { name: 'Gold', color: 'bg-amber-100 text-amber-700' };
+    if (points >= 500) return { name: 'Silber', color: 'bg-neutral-200 text-neutral-700' };
+    return { name: 'Bronze', color: 'bg-orange-100 text-orange-700' };
   };
 
   return (
-    <div className="space-y-8 max-w-7xl mx-auto">
+    <div className="space-y-6 animate-in">
+      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900">Kunden</h1>
-          <p className="text-slate-500 mt-1">{customers.length} registrierte Kunden</p>
+          <h1 className="text-[28px] font-semibold tracking-tight text-neutral-900">Kunden</h1>
+          <p className="text-neutral-400 text-sm mt-1">{customers.length} registriert</p>
         </div>
         <button
           onClick={() => { setEditingCustomer(null); setShowModal(true); }}
-          className="inline-flex items-center gap-2 bg-gradient-to-r from-violet-500 to-purple-600 text-white px-5 py-2.5 rounded-xl hover:shadow-lg hover:shadow-violet-500/25 transition-all font-medium"
+          className="inline-flex items-center gap-2 bg-neutral-900 text-white px-5 py-2.5 rounded-xl hover:bg-neutral-800 transition-colors text-sm font-medium"
         >
-          <Plus className="w-5 h-5" />
-          Neuer Kunde
+          <Plus className="w-4 h-4" />
+          Hinzufügen
         </button>
       </div>
 
       {/* Search */}
-      <div className="relative">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+      <div className="relative max-w-md">
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
         <input
           type="text"
-          placeholder="Kunden suchen (Name, E-Mail, Telefon)..."
+          placeholder="Suchen..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full pl-12 pr-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all"
+          className="w-full pl-11 pr-4 py-2.5 bg-white border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:border-transparent text-sm transition-shadow"
         />
       </div>
 
-      {/* Customer List */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* Customer Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         {filteredCustomers.map((customer) => {
-          const loyalty = getLoyaltyTier(customer.loyaltyPoints);
+          const tier = getTier(customer.loyaltyPoints);
           return (
-            <div key={customer.id} className="group bg-white rounded-2xl shadow-sm border border-slate-100 p-6 hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300">
+            <div key={customer.id} className="bg-white rounded-2xl border border-neutral-100 p-5 hover:shadow-lg hover:shadow-neutral-100 transition-all duration-300">
               <div className="flex items-start justify-between mb-4">
-                <div className="flex items-center gap-4">
-                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${loyalty.color} flex items-center justify-center shadow-lg`}>
-                    <span className="text-white font-bold text-lg">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-neutral-200 to-neutral-300 flex items-center justify-center">
+                    <span className="text-neutral-600 font-semibold">
                       {customer.firstName[0]}{customer.lastName[0]}
                     </span>
                   </div>
                   <div>
-                    <h3 className="font-bold text-slate-900 text-lg">
+                    <h3 className="font-semibold text-neutral-900">
                       {customer.firstName} {customer.lastName}
                     </h3>
-                    <div className="flex items-center gap-2 mt-1">
-                      <Crown className="w-4 h-4 text-amber-500" />
-                      <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${loyalty.bgColor}`}>
-                        {loyalty.tier}
-                      </span>
-                      <span className="text-sm text-slate-500">
-                        {customer.loyaltyPoints} Punkte
-                      </span>
-                    </div>
+                    <span className={`text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full ${tier.color}`}>
+                      {tier.name}
+                    </span>
                   </div>
                 </div>
-                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="relative">
                   <button
-                    onClick={() => { setEditingCustomer(customer); setShowModal(true); }}
-                    className="p-2 hover:bg-slate-100 rounded-xl transition-colors"
+                    onClick={() => setActiveMenu(activeMenu === customer.id ? null : customer.id)}
+                    className="w-8 h-8 rounded-full hover:bg-neutral-100 flex items-center justify-center transition-colors"
                   >
-                    <Edit2 className="w-4 h-4 text-slate-500" />
+                    <MoreHorizontal className="w-4 h-4 text-neutral-400" />
                   </button>
-                  <button
-                    onClick={() => deleteCustomer(customer.id)}
-                    className="p-2 hover:bg-rose-50 rounded-xl transition-colors"
-                  >
-                    <Trash2 className="w-4 h-4 text-rose-500" />
-                  </button>
+                  {activeMenu === customer.id && (
+                    <div className="absolute top-9 right-0 bg-white rounded-xl shadow-lg border border-neutral-100 py-1 min-w-[140px] z-10">
+                      <button
+                        onClick={() => { setEditingCustomer(customer); setShowModal(true); setActiveMenu(null); }}
+                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-neutral-600 hover:bg-neutral-50"
+                      >
+                        <Edit2 className="w-4 h-4" />
+                        Bearbeiten
+                      </button>
+                      <button
+                        onClick={() => { deleteCustomer(customer.id); setActiveMenu(null); }}
+                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-rose-600 hover:bg-rose-50"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        Löschen
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
               
               <div className="space-y-2 mb-4">
-                <a href={`mailto:${customer.email}`} className="flex items-center gap-3 text-sm text-slate-600 hover:text-violet-600 transition-colors">
-                  <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center">
-                    <Mail className="w-4 h-4" />
-                  </div>
+                <a href={`mailto:${customer.email}`} className="flex items-center gap-2 text-sm text-neutral-500 hover:text-neutral-900 transition-colors">
+                  <Mail className="w-4 h-4" />
                   {customer.email}
                 </a>
-                <a href={`tel:${customer.phone}`} className="flex items-center gap-3 text-sm text-slate-600 hover:text-violet-600 transition-colors">
-                  <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center">
-                    <Phone className="w-4 h-4" />
-                  </div>
+                <a href={`tel:${customer.phone}`} className="flex items-center gap-2 text-sm text-neutral-500 hover:text-neutral-900 transition-colors">
+                  <Phone className="w-4 h-4" />
                   {customer.phone}
                 </a>
               </div>
 
-              <div className="flex items-center justify-between pt-4 border-t border-slate-100">
-                <span className="text-sm text-slate-500">Gesamtumsatz</span>
-                <span className="text-lg font-bold text-slate-900">
-                  €{customer.totalPurchases.toLocaleString('de-DE')}
-                </span>
+              <div className="pt-4 border-t border-neutral-100 flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-neutral-400">Umsatz</p>
+                  <p className="font-semibold text-neutral-900">€{customer.totalPurchases.toLocaleString('de-DE')}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-xs text-neutral-400">Punkte</p>
+                  <p className="font-semibold text-neutral-900">{customer.loyaltyPoints}</p>
+                </div>
               </div>
 
               {customer.notes && (
-                <div className="mt-4 p-4 bg-gradient-to-r from-violet-50 to-purple-50 rounded-xl border border-violet-100">
-                  <p className="text-sm text-violet-700">{customer.notes}</p>
+                <div className="mt-4 p-3 bg-neutral-50 rounded-xl">
+                  <p className="text-xs text-neutral-500">{customer.notes}</p>
                 </div>
               )}
             </div>
@@ -151,91 +158,96 @@ export function Customers() {
       </div>
 
       {filteredCustomers.length === 0 && (
-        <div className="text-center py-16">
-          <Users className="w-16 h-16 text-slate-200 mx-auto mb-4" />
-          <p className="text-slate-500 text-lg">Keine Kunden gefunden</p>
+        <div className="text-center py-20">
+          <p className="text-neutral-400">Keine Kunden gefunden</p>
         </div>
       )}
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto shadow-2xl">
             <form onSubmit={(e) => { e.preventDefault(); handleSave(new FormData(e.currentTarget)); }}>
-              <div className="p-6 border-b border-slate-100">
-                <h2 className="text-xl font-bold text-slate-900">
-                  {editingCustomer ? 'Kunde bearbeiten' : 'Neuer Kunde'}
+              <div className="flex items-center justify-between p-5 border-b border-neutral-100">
+                <h2 className="text-lg font-semibold text-neutral-900">
+                  {editingCustomer ? 'Bearbeiten' : 'Neuer Kunde'}
                 </h2>
+                <button
+                  type="button"
+                  onClick={() => { setShowModal(false); setEditingCustomer(null); }}
+                  className="w-8 h-8 rounded-full hover:bg-neutral-100 flex items-center justify-center transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
               </div>
-              <div className="p-6 space-y-5">
-                <div className="grid grid-cols-2 gap-4">
+              <div className="p-5 space-y-4">
+                <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Vorname</label>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1.5">Vorname</label>
                     <input
                       name="firstName"
                       defaultValue={editingCustomer?.firstName}
                       required
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:bg-white transition-all"
+                      className="w-full px-4 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:bg-white text-sm"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Nachname</label>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1.5">Nachname</label>
                     <input
                       name="lastName"
                       defaultValue={editingCustomer?.lastName}
                       required
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:bg-white transition-all"
+                      className="w-full px-4 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:bg-white text-sm"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">E-Mail</label>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1.5">E-Mail</label>
                   <input
                     name="email"
                     type="email"
                     defaultValue={editingCustomer?.email}
                     required
-                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:bg-white transition-all"
+                    className="w-full px-4 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:bg-white text-sm"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Telefon</label>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1.5">Telefon</label>
                   <input
                     name="phone"
                     defaultValue={editingCustomer?.phone}
-                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:bg-white transition-all"
+                    className="w-full px-4 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:bg-white text-sm"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Adresse</label>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1.5">Adresse</label>
                   <input
                     name="address"
                     defaultValue={editingCustomer?.address}
-                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:bg-white transition-all"
+                    className="w-full px-4 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:bg-white text-sm"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Notizen</label>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1.5">Notizen</label>
                   <textarea
                     name="notes"
                     defaultValue={editingCustomer?.notes}
-                    rows={3}
-                    placeholder="Vorlieben, wichtige Informationen..."
-                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:bg-white transition-all resize-none"
+                    rows={2}
+                    className="w-full px-4 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:bg-white text-sm resize-none"
                   />
                 </div>
               </div>
-              <div className="p-6 border-t border-slate-100 flex gap-3 justify-end bg-slate-50">
+              <div className="p-5 border-t border-neutral-100 flex gap-3 justify-end">
                 <button
                   type="button"
                   onClick={() => { setShowModal(false); setEditingCustomer(null); }}
-                  className="px-5 py-2.5 text-slate-600 hover:text-slate-900 font-medium rounded-xl hover:bg-slate-100 transition-colors"
+                  className="px-5 py-2.5 text-neutral-600 hover:text-neutral-900 text-sm font-medium"
                 >
                   Abbrechen
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 bg-gradient-to-r from-violet-500 to-purple-600 text-white rounded-xl hover:shadow-lg hover:shadow-violet-500/25 transition-all font-medium"
+                  className="px-5 py-2.5 bg-neutral-900 text-white rounded-xl hover:bg-neutral-800 text-sm font-medium"
                 >
                   Speichern
                 </button>
