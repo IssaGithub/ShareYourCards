@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - GewinnMax</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <a href="/" class="logo">
+        <div class="logo-icon">🎁</div>
+        <span>GewinnMax</span>
+      </a>
+      <nav>
+        <a href="#gewinnspiele" class="nav-link">Gewinnspiele</a>
+        <a href="#meine-teilnahmen" class="nav-link">Meine Teilnahmen</a>
+        <a href="#einstellungen" class="nav-link">Einstellungen</a>
+        <button class="btn btn-secondary btn-sm" onclick="handleLogout()">Abmelden</button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="dashboard-header">
+      <div class="container">
+        <h1>Willkommen zurück, <span id="user-name">Benutzer</span>!</h1>
+        <p>Hier ist deine Übersicht aller Gewinnspiele und Teilnahmen</p>
+      </div>
+    </section>
+
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value" id="stat-teilnahmen">0</div>
+          <div class="stat-label">Teilnahmen gesamt</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-aktiv">0</div>
+          <div class="stat-label">Aktive Gewinnspiele</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-verfuegbar">0</div>
+          <div class="stat-label">Verfügbare Gewinnspiele</div>
+        </div>
+      </div>
+
+      <div id="auto-teilnahme-banner" class="alert alert-info" style="display: none;">
+        <span>🎯</span>
+        <span>Es gibt neue Gewinnspiele! Klicke auf "Auto-Teilnahme starten" um automatisch teilzunehmen.</span>
+        <button class="btn btn-success btn-sm" onclick="startAutoTeilnahme()" style="margin-left: auto;">Auto-Teilnahme starten</button>
+      </div>
+
+      <section id="gewinnspiele">
+        <div class="section-header">
+          <h2>Verfügbare Gewinnspiele</h2>
+          <div class="filter-group">
+            <select id="region-filter" onchange="loadGewinnspiele()">
+              <option value="alle">Alle Regionen</option>
+            </select>
+            <button class="btn btn-success" onclick="startAutoTeilnahme()">
+              🚀 Auto-Teilnahme
+            </button>
+          </div>
+        </div>
+
+        <div id="gewinnspiele-list" class="gewinnspiel-grid">
+          <div class="loading">
+            <div class="spinner"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="meine-teilnahmen">
+        <div class="section-header">
+          <h2>Meine Teilnahmen</h2>
+        </div>
+
+        <div id="teilnahmen-list" class="teilnahmen-liste">
+          <div class="loading">
+            <div class="spinner"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="einstellungen">
+        <div class="section-header">
+          <h2>Einstellungen</h2>
+        </div>
+
+        <div class="settings-section">
+          <h3>Konto-Einstellungen</h3>
+          
+          <div class="form-group">
+            <label for="settings-region">Meine Region</label>
+            <select id="settings-region">
+              <option value="">Bitte wählen...</option>
+            </select>
+          </div>
+
+          <div class="toggle-container">
+            <div class="toggle-info">
+              <h4>Automatische Teilnahme</h4>
+              <p>Aktiviere diese Option, um automatisch an allen kostenlosen Gewinnspielen in deiner Region teilzunehmen</p>
+            </div>
+            <div class="toggle-switch" id="auto-teilnahme-toggle" onclick="toggleAutoTeilnahme()"></div>
+          </div>
+
+          <button class="btn btn-primary" onclick="saveSettings()" style="margin-top: 20px;">Einstellungen speichern</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div class="modal-overlay" id="result-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Auto-Teilnahme Ergebnis</h2>
+        <button class="modal-close" onclick="closeResultModal()">&times;</button>
+      </div>
+      <div id="result-content">
+      </div>
+      <button class="btn btn-primary" onclick="closeResultModal()" style="width: 100%; margin-top: 20px;">Schließen</button>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 GewinnMax - Alle Rechte vorbehalten</p>
+    </div>
+  </footer>
+
+  <script src="/js/dashboard.js"></script>
+</body>
+</html>
