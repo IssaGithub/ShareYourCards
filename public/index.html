@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GewinnMax - Automatische Gewinnspiel-Teilnahme</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <a href="/" class="logo">
+        <div class="logo-icon">🎁</div>
+        <span>GewinnMax</span>
+      </a>
+      <nav id="nav-menu">
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#wie-es-funktioniert" class="nav-link">Wie es funktioniert</a>
+        <button class="btn btn-primary" onclick="showAuthModal()">Anmelden</button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1>Gewinne automatisch bei kostenlosen Gewinnspielen</h1>
+        <p>Registriere dich einmal und nimm automatisch an allen kostenlosen Gewinnspielen in deiner Region teil. Nie wieder eine Chance verpassen!</p>
+        <button class="btn btn-primary btn-lg" onclick="showAuthModal()">Jetzt kostenlos starten</button>
+
+        <div class="features" id="features">
+          <div class="feature-card">
+            <div class="feature-icon">🚀</div>
+            <h3>Automatische Teilnahme</h3>
+            <p>Mit einem Klick an allen verfügbaren Gewinnspielen teilnehmen</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📍</div>
+            <h3>Regionale Filter</h3>
+            <p>Nur Gewinnspiele in deiner Region - keine unnötigen Teilnahmen</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">💯</div>
+            <h3>100% Kostenlos</h3>
+            <p>Nur kostenlose Gewinnspiele - keine versteckten Kosten</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="wie-es-funktioniert" style="padding: 80px 0;">
+      <div class="container">
+        <h2 style="text-align: center; margin-bottom: 40px; font-size: 2rem;">Wie es funktioniert</h2>
+        <div class="features">
+          <div class="feature-card">
+            <div class="feature-icon">1️⃣</div>
+            <h3>Registrieren</h3>
+            <p>Erstelle ein kostenloses Konto mit deinen Daten und wähle deine Region</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">2️⃣</div>
+            <h3>Durchstöbern</h3>
+            <p>Sieh dir alle verfügbaren kostenlosen Gewinnspiele in deiner Region an</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">3️⃣</div>
+            <h3>Auto-Teilnahme</h3>
+            <p>Aktiviere die automatische Teilnahme und lass uns den Rest erledigen</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal-overlay" id="auth-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="auth-title">Anmelden</h2>
+        <button class="modal-close" onclick="closeAuthModal()">&times;</button>
+      </div>
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchAuthTab('login')">Anmelden</button>
+        <button class="auth-tab" onclick="switchAuthTab('register')">Registrieren</button>
+      </div>
+
+      <div id="auth-alert"></div>
+
+      <form id="login-form" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label for="login-email">E-Mail</label>
+          <input type="email" id="login-email" required placeholder="deine@email.de">
+        </div>
+        <div class="form-group">
+          <label for="login-password">Passwort</label>
+          <input type="password" id="login-password" required placeholder="Dein Passwort">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Anmelden</button>
+      </form>
+
+      <form id="register-form" style="display: none;" onsubmit="handleRegister(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="reg-vorname">Vorname</label>
+            <input type="text" id="reg-vorname" required placeholder="Max">
+          </div>
+          <div class="form-group">
+            <label for="reg-nachname">Nachname</label>
+            <input type="text" id="reg-nachname" required placeholder="Mustermann">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="reg-email">E-Mail</label>
+          <input type="email" id="reg-email" required placeholder="deine@email.de">
+        </div>
+        <div class="form-group">
+          <label for="reg-password">Passwort</label>
+          <input type="password" id="reg-password" required minlength="6" placeholder="Mind. 6 Zeichen">
+        </div>
+        <div class="form-group">
+          <label for="reg-region">Region</label>
+          <select id="reg-region" required>
+            <option value="">Bitte wählen...</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Registrieren</button>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 GewinnMax - Alle Rechte vorbehalten</p>
+    </div>
+  </footer>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
